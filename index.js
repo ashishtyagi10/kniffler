@@ -1,6 +1,8 @@
-const fs = require("fs");
-const readline = require("readline");
-const { execSync } = require("child_process");
+import fs from "fs";
+import * as readline from "readline";
+import { execSync } from "child_process";
+import { platform } from "os";
+
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -16,10 +18,14 @@ rl.question("Enter project name: ", (projectName) => {
   // Change into project directory
   process.chdir(projectName);
 
-  //   Generating Front End Project
+  // Generating Front End Project
   fs.mkdirSync("frontend");
   process.chdir("frontend");
   const frontEndTech = ["Angular", "React", "Vue", "Flutter"];
+  console.log("Frontend technologies:  ")
+  frontEndTech.forEach((option, index) => {
+    console.log(`${index}: ${option}`);
+  });
   rl.question("Please choose the front end:  ", (answer) => {
     answers["frontend"] = answer;
     if (answer === "0") {
@@ -39,24 +45,30 @@ rl.question("Enter project name: ", (projectName) => {
 
     // Create backend directory
     process.chdir("..");
-    console.log("Creating back end in Django: ");
     fs.mkdirSync("backend");
-
-    // Change into backend directory
     process.chdir("backend");
 
-    // Run Django startproject command to create a new Django project
-    execSync(`django-admin startproject ${projectName} .`);
+    const backendTech = ["Django", "Spring"];
+    console.log("Backend technologies ...")
+    backendTech.forEach((option, index) => {
+      console.log(`${index}: ${option}`);
+    });
 
-    console.log(
-      `Created ${projectName} with Flutter frontend and Django backend`
-    );
-
-    rl.close();
-  });
-
-  console.log();
-  frontEndTech.forEach((option, index) => {
-    console.log(`${index}: ${option}`);
+    rl.question("Please choose the backend technology: ", (answer) => {
+      answers["backend"] = answer;
+      if (answer === "0") {
+        // Run Django startproject command to create a new Django project
+        console.log("Creating Django Project")
+        execSync(`django-admin startproject ${projectName} .`);
+      } else {
+        console.log(`creating spring project on ${platform}`);
+        execSync(`curl https://start.spring.io/starter.tgz -d dependencies=web,security,devtools -d name=backend -o backend.tgz`);
+        execSync(`tar -xzvf ./backend.tgz -C .`)
+      }
+      console.log(
+        `Created ${projectName} with ${frontEndTech[answers["frontend"]]} frontend and ${backendTech[answers["backend"]]} backend`
+      );
+      rl.close();
+    });
   });
 });

@@ -22,8 +22,14 @@
   "bugs": {
     "url": "https://github.com/ashishtyagi10/kniffler/issues"
   },
+  "type": "module",
   "homepage": "https://github.com/ashishtyagi10/kniffler#readme",
   "dependencies": {
     "kniffler": "^1.0.0"
+  },
+  "devDependencies": {
+    "adm-zip": "^0.5.10",
+    "axios": "^1.4.0",
+    "yauzl": "^2.10.0"
   }
 }
